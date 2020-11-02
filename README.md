@@ -2,10 +2,10 @@
 ## The Quest for Raw Signals:<br>A Quality Review of Publicly Available Photoplethysmography Datasets
 
 ### Description
-We have presented an analytical tool for the quality review of 10 publicly available photoplethysmography (PPG) datasets, based on 7 multi-varied decision metrics. Although all datasets were advertised to contain raw signals, the characteristics of the PPG data look quite diverse. Our developed tool enables to automatically analyze the suitability and applicability of datasets and helps to identify preprocessed and filtered signals with a limited evidence. The raw reference data, recorded with the MAX86140EVSYS# evaluation system, as well as the implemented Python tool, based on the presented 7 decision metrics, are available for download below, to support the reproducibility and the review of new datasets.
+In this GitHub repository, we present an analytical tool for the quality review of raw photoplethysmography (PPG) signals, based on 7 multi-varied decision metrics. It has been applied in the review of 10 publicly available photoplethysmography datasets, referred below in Citation. Although all tested datasets were advertised to contain raw signals, the characteristics of the PPG data look quite diverse. Our developed tool enables to automatically analyze the suitability and applicability of datasets and helps to identify preprocessed and filtered signals with a limited evidence. The raw reference data, recorded with the MAX86140EVSYS# evaluation system, as well as the implemented Python tool, based on the presented 7 decision metrics, are available for download, to support the reproducibility and the review of new datasets.
 
 ### Download
-This GitHub repository provides the developed analytical tool.
+This GitHub repository provides the developed analytical tool *PPGraw*.
 The raw photoplethysmography reference signals can be downloaded via the following link:
 https://ubicomp.eti.uni-siegen.de/home/datasets/data20/index.html.en
 
