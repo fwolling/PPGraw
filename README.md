@@ -17,14 +17,27 @@ You may use this data for scientific, non-commercial purposes, provided that you
 
 ### Figures
 
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/00_max86140.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/01_maxrefdes100.png" alt="MAXREFDES100" style="float: left; margin-right: 10px;" />
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/02_dalia.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/03_wesad.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/04_nrblsvm.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/05_ppgbp.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/06_bidmc.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/07_wpde.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/08_clbpe.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/09_spc2015.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
-<img src="https://github.com/fwolling/PPGraw/blob/main/figures/10_spc2013.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+#### Reference Signals
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/00_max86140.png" alt="Reference Data: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+
+#### Evaluated Datasets
+S01: MAXREFDES100#
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/01_maxrefdes100.png" alt="S01: MAXREFDES100#" style="float: left; margin-right: 10px;" />
+S02: PPG-DaLiA
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/02_dalia.png" alt="S02: PPG-DaLiA" style="float: left; margin-right: 10px;" />
+S03: WESAD
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/03_wesad.png" alt="S03: WESAD" style="float: left; margin-right: 10px;" />
+S04: BloodLossSVM
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/04_nrblsvm.png" alt="S04: BloodLossSVM" style="float: left; margin-right: 10px;" />
+S05: PPG-BP
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/05_ppgbp.png" alt="S05: PPG-BP" style="float: left; margin-right: 10px;" />
+S06: BIDMC
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/06_bidmc.png" alt="S06: BIDMC" style="float: left; margin-right: 10px;" />
+S07: Wrist PPG During Exercise
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/07_wpde.png" alt="S07: Wrist PPG During Exercise" style="float: left; margin-right: 10px;" />
+S08: Cuff-Less Blood Pressure Estimation
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/08_clbpe.png" alt="S08: Cuff-Less Blood Pressure Estimation" style="float: left; margin-right: 10px;" />
+S09: IEEE SPC 2015 (TROIKA)
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/09_spc2015.png" alt="S09: IEEE SPC 2015 (TROIKA)" style="float: left; margin-right: 10px;" />
+S10: IEEE SPC 2013
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/10_spc2013.png" alt="S10: IEEE SPC 2013" style="float: left; margin-right: 10px;" />
