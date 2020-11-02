@@ -18,3 +18,13 @@ You may use this data for scientific, non-commercial purposes, provided that you
 ### Figures
 
 <img src="https://github.com/fwolling/PPGraw/blob/main/figures/00_max86140.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/01_maxrefdes100.png" alt="MAXREFDES100" style="float: left; margin-right: 10px;" />
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/02_dalia.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/03_wesad.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/04_nrblsvm.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/05_ppgbp.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/06_bidmc.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/07_wpde.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/08_clbpe.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/09_spc2015.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/10_spc2013.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
