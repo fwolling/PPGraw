@@ -14,3 +14,7 @@ https://ubicomp.eti.uni-siegen.de/home/datasets/data20/index.html.en
 
 ### Disclaimer
 You may use this data for scientific, non-commercial purposes, provided that you give credit to the owners when publishing any work based on this data. We would also be very interested to hear back from you if you use our data in any way and are happy to answer any questions or address any remarks related to it.
+
+### Figures
+
+<img src="https://github.com/fwolling/PPGraw/blob/main/figures/00_max86140.png" alt="Reference Signals: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
