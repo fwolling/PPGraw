@@ -47,7 +47,7 @@ You may use the source code of the developed analytical tool *PPGraw* for scient
 
 ### References
 
-<a id="#ref_s01">**S01:**</a> Giorgio Biagetti, Paolo Crippa, Laura Falaschetti, Leonardo Saraceni, AndreaTiranti, and Claudio Turchetti. 2020. "Dataset from PPG wireless sensor for activity monitoring". Data in brief 29 (2020), 105044. https://doi.org/10.1016/j.dib.2019.105044
+<a id="ref_s01">**S01:**</a> Giorgio Biagetti, Paolo Crippa, Laura Falaschetti, Leonardo Saraceni, AndreaTiranti, and Claudio Turchetti. 2020. "Dataset from PPG wireless sensor for activity monitoring". Data in brief 29 (2020), 105044. https://doi.org/10.1016/j.dib.2019.105044
 
 **S02:** Attila Reiss, Ina Indlekofer, Philip Schmidt, and Kristof Van Laerhoven. 2019. "DeepPPG: Large-Scale Heart Rate Estimation with Convolutional Neural Networks". Sensors (Basel, Switzerland) 19, 14 (2019). https://doi.org/10.3390/s19143079
 
