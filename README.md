@@ -17,7 +17,7 @@ You may use the source code of the developed analytical tool *PPGraw* for scient
 
 <br>
 
-### Reference Signals
+### Reference Data
 **REF:** MAX86140EVSYS# [<a href="https://ubicomp.eti.uni-siegen.de/home/datasets/data20/index.html.en" target="_blank">data</a>]
 <img src="https://github.com/fwolling/PPGraw/blob/main/figures/00_max86140.png" alt="Reference Data: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
 
