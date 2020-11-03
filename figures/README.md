@@ -30,22 +30,22 @@
 
 ### References
 
-<a id="ref_s01">**S01:**</a> Giorgio Biagetti, Paolo Crippa, Laura Falaschetti, Leonardo Saraceni, AndreaTiranti, and Claudio Turchetti. 2020. "Dataset from PPG wireless sensor for activity monitoring". Data in brief 29 (2020), 105044. https://doi.org/10.1016/j.dib.2019.105044
+<a id="ref_s01">**S01:**</a> Giorgio Biagetti, Paolo Crippa, Laura Falaschetti, Leonardo Saraceni, AndreaTiranti, and Claudio Turchetti. 2020. "Dataset from PPG wireless sensor for activity monitoring". *Data in brief 29 (2020), 105044*. https://doi.org/10.1016/j.dib.2019.105044
 
-<a id="ref_s02">**S02:**</a> Attila Reiss, Ina Indlekofer, Philip Schmidt, and Kristof Van Laerhoven. 2019. "DeepPPG: Large-Scale Heart Rate Estimation with Convolutional Neural Networks". Sensors (Basel, Switzerland) 19, 14 (2019). https://doi.org/10.3390/s19143079
+<a id="ref_s02">**S02:**</a> Attila Reiss, Ina Indlekofer, Philip Schmidt, and Kristof Van Laerhoven. 2019. "DeepPPG: Large-Scale Heart Rate Estimation with Convolutional Neural Networks". *Sensors (Basel, Switzerland) 19, 14 (2019)*. https://doi.org/10.3390/s19143079
 
 <a id="ref_s03">**S03:**</a> Philip Schmidt, Attila Reiss, Robert Duerichen, Claus Marberger, and Kristof Van Laerhoven. 2018. "Introducing WESAD, a Multimodal Dataset for Wearable Stressand Affect Detection". https://doi.org/10.1145/3242969.3242985
 
-<a id="ref_s04">**S04:**</a> Natasa Reljin, Gary Zimmer, Yelena Malyuta, Kirk Shelley, Yitzhak Mendel-son, David  J. Blehar, Chad E. Darling, and Ki H. Chon. 2018. "Using support vector machines on photoplethysmographic signals to discriminate between hypovolemia and euvolemia". PloS one 13, 3 (2018), e0195087.https://doi.org/10.1371/journal.pone.0195087
+<a id="ref_s04">**S04:**</a> Natasa Reljin, Gary Zimmer, Yelena Malyuta, Kirk Shelley, Yitzhak Mendel-son, David  J. Blehar, Chad E. Darling, and Ki H. Chon. 2018. "Using support vector machines on photoplethysmographic signals to discriminate between hypovolemia and euvolemia". *PloS one 13, 3 (2018), e0195087*. https://doi.org/10.1371/journal.pone.0195087
 
-<a id="ref_s05">**S05:**</a> Yongbo Liang, Zhencheng Chen, Guiyong Liu, and Mohamed Elgendi. 2018. "A new, short-recorded photoplethysmogram dataset for blood pressure monitoring in China". Scientific Data 5, 1 (2018), 180020. https://doi.org/10.1038/sdata.2018.20
+<a id="ref_s05">**S05:**</a> Yongbo Liang, Zhencheng Chen, Guiyong Liu, and Mohamed Elgendi. 2018. "A new, short-recorded photoplethysmogram dataset for blood pressure monitoring in China". *Scientific Data 5, 1 (2018), 180020*. https://doi.org/10.1038/sdata.2018.20
 
-<a id="ref_s06">**S06:**</a> Marco A. F. Pimentel, Alistair E. W. Johnson, Peter H. Charlton, Drew Birrenkott, Peter J. Watkinson, Lionel Tarassenko, and David A. Clifton. 2017. "Toward a Robust Estimation of Respiratory Rate From Pulse Oximeters". IEEE transactions on bio-medical engineering 64, 8 (2017), 1914–1923.  https://doi.org/10.1109/TBME.2016.2613124
+<a id="ref_s06">**S06:**</a> Marco A. F. Pimentel, Alistair E. W. Johnson, Peter H. Charlton, Drew Birrenkott, Peter J. Watkinson, Lionel Tarassenko, and David A. Clifton. 2017. "Toward a Robust Estimation of Respiratory Rate From Pulse Oximeters". *IEEE transactions on bio-medical engineering 64, 8 (2017), 1914–1923*.  https://doi.org/10.1109/TBME.2016.2613124
 
-<a id="ref_s07">**S07:**</a> Delaram Jarchi and Alexander Casson. 2017. "Description of a Database Containing Wrist PPG Signals Recorded during Physical Exercise with Both Accelerometer and Gyroscope Measures of Motion". Data 2, 1 (2017), 1. https://doi.org/10.3390/data2010001
+<a id="ref_s07">**S07:**</a> Delaram Jarchi and Alexander Casson. 2017. "Description of a Database Containing Wrist PPG Signals Recorded during Physical Exercise with Both Accelerometer and Gyroscope Measures of Motion". *Data 2, 1 (2017), 1*. https://doi.org/10.3390/data2010001
 
-<a id="ref_s08">**S08:**</a> Mohamad Kachuee, Mohammad Mahdi Kiani, Hoda Mohammadzade, and Mahdi Shabany. 2015. "Cuff-less high-accuracy calibration-free blood pressure estimation using pulse transit time". (2015), 1006–1009. https://doi.org/10.1109/ISCAS.2015.7168806
+<a id="ref_s08">**S08:**</a> Mohamad Kachuee, Mohammad Mahdi Kiani, Hoda Mohammadzade, and Mahdi Shabany. 2015. "Cuff-less high-accuracy calibration-free blood pressure estimation using pulse transit time". *(2015), 1006–1009*. https://doi.org/10.1109/ISCAS.2015.7168806
 
-<a id="ref_s09">**S09:**</a> Zhilin Zhang, Zhouyue Pi, and Benyuan Liu. 2015. "TROIKA: A General Framework for Heart Rate Monitoring Using Wrist-Type Photoplethysmographic Signals During Intensive Physical Exercise". IEEE transactions on bio-medical engineering 62, 2 (2015), 522–531. https://doi.org/10.1109/TBME.2014.2359372
+<a id="ref_s09">**S09:**</a> Zhilin Zhang, Zhouyue Pi, and Benyuan Liu. 2015. "TROIKA: A General Framework for Heart Rate Monitoring Using Wrist-Type Photoplethysmographic Signals During Intensive Physical Exercise". *IEEE transactions on bio-medical engineering 62, 2 (2015), 522–531*. https://doi.org/10.1109/TBME.2014.2359372
 
-<a id="ref_s10">**S10:**</a> Walter Karlen, Srinivas Raman, J. Mark Ansermino, and Guy A. Dumont. 2013. "Multiparameter Respiratory Rate Estimation from the Photoplethysmogram". IEEE transactions on bio-medical engineering 60, 7 (2013), 1946–1953.https://doi.org/10.1109/TBME.2013.2246160
+<a id="ref_s10">**S10:**</a> Walter Karlen, Srinivas Raman, J. Mark Ansermino, and Guy A. Dumont. 2013. "Multiparameter Respiratory Rate Estimation from the Photoplethysmogram". *IEEE transactions on bio-medical engineering 60, 7 (2013), 1946–1953*. https://doi.org/10.1109/TBME.2013.2246160
