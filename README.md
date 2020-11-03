@@ -42,3 +42,27 @@ You may use the source code of the developed analytical tool *PPGraw* for scient
 <img src="https://github.com/fwolling/PPGraw/blob/main/figures/09_spc2015.png" alt="S09: IEEE SPC 2015 (TROIKA)" style="float: left; margin-right: 10px;" />
 **S10:** IEEE SPC 2013 [Karlen et al., <a href="http://www.capnobase.org/index.php?id=857" target="_blank">data</a>]
 <img src="https://github.com/fwolling/PPGraw/blob/main/figures/10_spc2013.png" alt="S10: IEEE SPC 2013" style="float: left; margin-right: 10px;" />
+
+<br>
+
+### References
+
+**S01:** Giorgio Biagetti, Paolo Crippa, Laura Falaschetti, Leonardo Saraceni, AndreaTiranti, and Claudio Turchetti. 2020. "Dataset from PPG wireless sensor for activity monitoring". Data in brief 29 (2020), 105044. https://doi.org/10.1016/j.dib.2019.105044
+
+**S02:** Attila Reiss, Ina Indlekofer, Philip Schmidt, and Kristof Van Laerhoven. 2019. "DeepPPG: Large-Scale Heart Rate Estimation with Convolutional Neural Networks". Sensors (Basel, Switzerland) 19, 14 (2019).
+
+**S03:** Philip Schmidt, Attila Reiss, Robert Duerichen, Claus Marberger, and Kristof Van Laerhoven. 2018. "Introducing WESAD, a Multimodal Dataset for Wearable Stressand Affect Detection". https://doi.org/10.1145/3242969.3242985
+
+**S04:** Natasa Reljin, Gary Zimmer, Yelena Malyuta, Kirk Shelley, Yitzhak Mendel-son, David  J. Blehar, Chad E. Darling, and Ki H. Chon. 2018. "Using support vector machines on photoplethysmographic signals to discriminate between hypovolemia and euvolemia". PloS one 13, 3 (2018), e0195087.https://doi.org/10.1371/journal.pone.0195087
+
+**S05:** Yongbo Liang, Zhencheng Chen, Guiyong Liu, and Mohamed Elgendi. 2018. "A new, short-recorded photoplethysmogram dataset for blood pressure monitoring in China". Scientific Data 5, 1 (2018), 180020. https://doi.org/10.1038/sdata.2018.20
+
+**S06:** Marco A. F. Pimentel, Alistair E. W. Johnson, Peter H. Charlton, Drew Birrenkott, Peter J. Watkinson, Lionel Tarassenko, and David A. Clifton. 2017. "Toward a Robust Estimation of Respiratory Rate From Pulse Oximeters". IEEE transactions on bio-medical engineering 64, 8 (2017), 1914–1923.  https://doi.org/10.1109/TBME.2016.2613124
+
+**S07:** Delaram Jarchi and Alexander Casson. 2017. "Description of a Database Containing Wrist PPG Signals Recorded during Physical Exercise with Both Accelerometer and Gyroscope Measures of Motion". Data 2, 1 (2017), 1. https://doi.org/10.3390/data2010001
+
+**S08:** Mohamad Kachuee, Mohammad Mahdi Kiani, Hoda Mohammadzade, and Mahdi Shabany. 2015. "Cuff-less high-accuracy calibration-free blood pressure estimation using pulse transit time". (2015), 1006–1009. https://doi.org/10.1109/ISCAS.2015.7168806
+
+**S09:** Zhilin Zhang, Zhouyue Pi, and Benyuan Liu. 2015. "TROIKA: A General Framework for Heart Rate Monitoring Using Wrist-Type Photoplethysmographic Signals During Intensive Physical Exercise". IEEE transactions on bio-medical engineering 62, 2 (2015), 522–531. https://doi.org/10.1109/TBME.2014.2359372
+
+**S10:** Walter Karlen, Srinivas Raman, J. Mark Ansermino, and Guy A. Dumont. 2013. "Multiparameter Respiratory Rate Estimation from the Photoplethysmogram". IEEE transactions on bio-medical engineering 60, 7 (2013), 1946–1953.https://doi.org/10.1109/TBME.2013.2246160
