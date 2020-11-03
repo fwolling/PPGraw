@@ -22,7 +22,7 @@ You may use the source code of the developed analytical tool *PPGraw* for scient
 <img src="https://github.com/fwolling/PPGraw/blob/main/figures/00_max86140.png" alt="Reference Data: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
 
 ### Evaluated Datasets
-**S01:** MAXREFDES100# [Biagetti et al., <a href="https://www.sciencedirect.com/science/article/pii/S2352340919314003" target="_blank">data</a>]
+**S01:** MAXREFDES100# [<a href="#ref_s01">Biagetti et al.</a>, <a href="https://www.sciencedirect.com/science/article/pii/S2352340919314003" target="_blank">data</a>]
 <img src="https://github.com/fwolling/PPGraw/blob/main/figures/01_maxrefdes100.png" alt="S01: MAXREFDES100#" style="float: left; margin-right: 10px;" />
 **S02:** PPG-DaLiA [Reiss et al., <a href="https://ubicomp.eti.uni-siegen.de/home/datasets/sensors19/index.html.en" target="_blank">data</a>]
 <img src="https://github.com/fwolling/PPGraw/blob/main/figures/02_dalia.png" alt="S02: PPG-DaLiA" style="float: left; margin-right: 10px;" />
@@ -47,7 +47,7 @@ You may use the source code of the developed analytical tool *PPGraw* for scient
 
 ### References
 
-**S01:** Giorgio Biagetti, Paolo Crippa, Laura Falaschetti, Leonardo Saraceni, AndreaTiranti, and Claudio Turchetti. 2020. "Dataset from PPG wireless sensor for activity monitoring". Data in brief 29 (2020), 105044. https://doi.org/10.1016/j.dib.2019.105044
+<a id="#ref_s01">**S01:**</a> Giorgio Biagetti, Paolo Crippa, Laura Falaschetti, Leonardo Saraceni, AndreaTiranti, and Claudio Turchetti. 2020. "Dataset from PPG wireless sensor for activity monitoring". Data in brief 29 (2020), 105044. https://doi.org/10.1016/j.dib.2019.105044
 
 **S02:** Attila Reiss, Ina Indlekofer, Philip Schmidt, and Kristof Van Laerhoven. 2019. "DeepPPG: Large-Scale Heart Rate Estimation with Convolutional Neural Networks". Sensors (Basel, Switzerland) 19, 14 (2019). https://doi.org/10.3390/s19143079
 
