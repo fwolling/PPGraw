@@ -22,6 +22,9 @@ You may use the source code of the developed analytical tool *PPGraw* for scient
 <img src="https://github.com/fwolling/PPGraw/blob/main/figures/00_max86140.png" alt="Reference Data: MAX86140EVSYS#" style="float: left; margin-right: 10px;" />
 
 ### Evaluated Datasets
+
+Excerpts from the reviewed datasets: Short close-up of few pulses on the left, a 30-second window in the middle, and its respective frequency spectrum (FFT) on the right. Note that the PPG-BP dataset (S05) contains only snippets of 2.1 s length. Frequency bands: very low frequency (VLF, < 0.167 Hz, red), low frequency (LF, 0.167 to 0.667 Hz, orange), and intermediate frequency (IF, 0.5 to 3.0 Hz , green) while the high frequency (HF, > 3.0 Hz) noise and harmonics are clipped.
+
 **S01:** MAXREFDES100# [<a href="#ref_s01">Biagetti et al.</a>, <a href="https://www.sciencedirect.com/science/article/pii/S2352340919314003" target="_blank">data</a>]
 <img src="https://github.com/fwolling/PPGraw/blob/main/figures/01_maxrefdes100.png" alt="S01: MAXREFDES100#" style="float: left; margin-right: 10px;" />
 **S02:** PPG-DaLiA [<a href="#ref_s02">Reiss et al.</a>, <a href="https://ubicomp.eti.uni-siegen.de/home/datasets/sensors19/index.html.en" target="_blank">data</a>]
