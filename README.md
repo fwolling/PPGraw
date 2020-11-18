@@ -15,9 +15,7 @@ https://ubicomp.eti.uni-siegen.de/home/datasets/data20/index.html.en
 ### Disclaimer
 You may use the source code of the developed analytical tool *PPGraw* for scientific, non-commercial purposes, provided that you give credit to the owners when publishing any work based on it. We would also be very interested to hear back from you if you use our tool or metrics in any way and are happy to answer any questions or address any remarks related to it.
 
-<br>
-
-### Video Presentation
+### Presentation Video
 <a href="https://www.youtube.com/watch?v=RshKMVtH7P0" target="_blank"><img src="https://raw.githubusercontent.com/fwolling/PPGraw/main/figures/youtube.png" alt="DATA'20 - The Quest for Raw Signals - A Quality Review of Photoplethysmography Datasets" width="600" style="float: center;" /></a>
 
 <br>
