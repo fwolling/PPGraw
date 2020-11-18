@@ -17,9 +17,7 @@ You may use the source code of the developed analytical tool *PPGraw* for scient
 
 <br>
 
-[![DATA'20 - The Quest for Raw Signals - A Quality Review of Photoplethysmography Datasets](http://img.youtube.com/vi/RshKMVtH7P0/0.jpg)](https://www.youtube.com/watch?v=RshKMVtH7P0 "DATA'20 - The Quest for Raw Signals - A Quality Review of Photoplethysmography Datasets")
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/RshKMVtH7P0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<a href="https://www.youtube.com/watch?v=RshKMVtH7P0" target="_blank"><img src="http://img.youtube.com/vi/RshKMVtH7P0/0.jpg" alt="DATA'20 - The Quest for Raw Signals - A Quality Review of Photoplethysmography Datasets" style="float: center;" /></a>
 
 <br>
 
