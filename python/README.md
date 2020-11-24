@@ -1,6 +1,6 @@
 # PPGraw
 
-*PPGraw* is a Python tool developed for the analytical quality review of supposedly raw, unfiltered photoplethysmography signals. This directory contains an excerpt from the raw, unfiltered reference data **ref_sample.p**, the Python tool itself **PPGraw.py**, a Jupyter notebook **show_ref.ipynb** to visualize the reference signal, and a Jupyter notebook **show_review.ipynb** that runs a quality review on the reference data and details the 7 multi-varied decision metrics.
+*PPGraw* is a Python tool developed for the analytical quality review of supposedly raw, unfiltered photoplethysmography signals. This directory contains an excerpt from the raw, unfiltered reference data [ref_sample.p](ref_sample.p), the Python tool itself [PPGraw.py](PPGraw.py), a Jupyter notebook [show_ref.ipynb](show_ref.ipynb) to visualize the reference signal, and a Jupyter notebook [how_review.ipynb](show_review.ipynb) that runs a quality review on the reference data and details the 7 multi-varied decision metrics.
 
 * **ref_sample.p** is a Python Pickle file containing a 3-minute excerpt of the raw, unfiltered photoplethysmography reference data
 * **PPGraw.py** contains the Python class of the analytical tool *PPGraw* for the automated quality review of raw photoplethysmography signals
