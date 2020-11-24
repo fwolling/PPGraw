@@ -1,5 +1,4 @@
 # PPGraw
-## The Quest for Raw Signals:<br>A Quality Review of Publicly Available Photoplethysmography Datasets
 
 ### Contents
 * **ref_sample.p** is a Python Pickle file containing an excerpt of the raw, unfiltered PPG reference signal
