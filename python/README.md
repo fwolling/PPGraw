@@ -1,8 +1,8 @@
 # PPGraw
 
 ### Contents
-* **ref_sample.p** is a Python Pickle file containing an excerpt of the raw, unfiltered PPG reference signal
-* **PPGraw.py** is the analytical tool *PPGraw* for the autmated quality review of raw photoplethysmography signals
+* **ref_sample.p** is a Python Pickle file containing a 3-minute excerpt of the raw, unfiltered PPG reference signal
+* **PPGraw.py** contains the Python class of the analytical tool *PPGraw* for the automated quality review of raw photoplethysmography signals
 * **show_ref.ipynb** is a Jupyter Notebook that visualizes the reference signal
 * **show_review.ipynb** is a Jupyter Notebook that runs the quality review on the reference signal
 
