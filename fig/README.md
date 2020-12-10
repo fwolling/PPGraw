@@ -1,4 +1,4 @@
-# fig
+# Figures
 
 ### Reference Data
 **REF:** MAX86140EVSYS# [<a href="https://ubicomp.eti.uni-siegen.de/home/datasets/data20/index.html.en" target="_blank">data</a>]
