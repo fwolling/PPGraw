@@ -7,7 +7,7 @@
 # by Florian Wolling and Kristof Van Laerhoven. In DATA'20: Proceedings of the 3rd Workshop on Data Acquisition To
 # Analysis, DATA 2020, Virtual Event, Japan, November 2020, ACM, 2020. https://doi.org/10.1145/3419016.3431485
 #
-# Version 1.0 (November 2020)
+# Version 1.1 (February 2021)
 
 
 import pickle
@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from tabulate import tabulate
 
 __author__ = "Florian Wolling, https://github.com/fwolling/"
-__version__ = "1.0"
+__version__ = "1.1"
 
 
 class PPGraw:
@@ -34,11 +34,11 @@ class PPGraw:
     Information: https://ubicomp.eti.uni-siegen.de/home/datasets/data20/index.html.en
     GitHub repository: https://github.com/fwolling/PPGraw
 
-    Version 1.0 (November 2020)
+    Version 1.1 (February 2021)
 
     Attributes
     ----------
-    time : None or list of floats, optional, default = None
+    time : None or list of floats, optional, default=None
         The vector that contains the timestamps.
     signal : list of floats, required
         The vector that contains the signal samples.
@@ -48,25 +48,45 @@ class PPGraw:
     Methods
     -------
     review_timebase
-        ...
+        The regular sampling of devices is often assumed to be constant at a desired rate, but often the sampling period
+        is slightly deviating, resulting in a jittering frequency. The tool review_timebase considers the metrics mean
+        and standard deviation to review the provided timebase, whether the timestamps are absent, original and raw, or
+        artificial and subsequently added. The determined mean is also compared to the desired reference fs.
     review_amplitude
-        ...
+        The amplitude of raw PPG signals naturally shows a large DC offset. Hence, the span of the amplitude, minimum
+        and maximum respectively, are utilized by the review_amplitude tool to reveal whether the signal has been
+        preprocessed, shifted towards zero, or has even been filtered. Furthermore, the mean and median of the signal
+        are derived to provide insights into the characteristics of the PPG signal.
     review_granularity
-        ...
+        Ideally, the granularity of a sampled signal is identical to the amplitude resolution. The metric helps to
+        unveil applied preprocessing as the values obtained from an ADC are integers by nature, preprocessed ones are,
+        however, usually represented by floats. The review_granularity tool determines the granularity from the sorted
+        list of unique values without duplicates by seeking the minimum Euclidean distance.
     review_normalization
-        ...
+        While the scope of a raw PPG signal is only a minor fraction of the overall signal's extent, it is commonly
+        cropped at its minimum to reduce the memory demands. Furthermore, it is common to scale and normalize the
+        scope to a range of [0,1] or [-1,1]. The review_normalization tool analyzes the signal's minimum and maximum.
     review_flipped
-        ...
+        Most traditional pulse oximetry sensors monitor the PPG signal proportional to the course of the arterial
+        blood pressure (ABP) and hence flipped the signal to enable this analogy. The raw signals of both PPG modes,
+        however, originally show an inversely proportional course. The review_flipped tool identifies the pulse
+        direction by 1) determining the pulses' center of mass and 2) comparing the steepness of the down and up slopes.
     review_frequency
-        ...
+        As all physiological signals, the raw PPG signal is a non-stationary one and dominated by baseline wandering.
+        Most approaches apply high-pass filters to remove the low-frequency components and to limit the pulsatile signal
+        in a constant boundary envelope. The review_frequency tool analyzes the frequency bands associated with activity
+        in the autonomic nervous system (VLF 0.0 to 0.167 Hz) and respiration (LF 0.167 to 0.667 Hz), and compares their
+        maxima with the maximum and mean of the frequency band typical for the natural heart rate (IF 0.5 to 3.0 Hz).
     review_artifacts
-        ...
+        Clipping artifacts are common for aged datasets where the signal has been normalized while the caps of the
+        lowest or highest peaks are cut due to inaccuracies. The review_artifacts tool detects these flat tops by means
+        of multiple successive samples that stay at the constant boundary values for a longer period.
     review
-        ...
+        The review tool sequentially runs all previously provided tools.
 
-    Notes
-    -----
-
+    Future Work
+    -----------
+    The detection of typical motion artifacts is not yet implemented, would however be an interesting quality metric.
 
     References
     ----------
@@ -180,23 +200,28 @@ class PPGraw:
         return [-d for d in data]  # Flipping
 
     def review_timebase(self, time=None, signal=None, fs=None,
-                       factor=0,  # 0: seconds, 3: milliseconds, 6: microseconds
-                       debug=False):
-        """Analyse the provided time base regarding real sampling rate and jitter.
+                        factor=0,  # 0: seconds, 3: milliseconds, 6: microseconds
+                        debug=False):
+        """Tool to review the timebase regarding real sampling rate and jitter.
 
-        :param time:
-        :param signal:
-        :param fs:
-        :param factor:
-        :param debug:
+        The regular sampling of devices is often assumed to be constant at a desired rate, but often the sampling period
+        is slightly deviating, resulting in a jittering frequency. The tool review_timebase considers the metrics mean
+        and standard deviation to review the provided timebase, whether the timestamps are absent, original and raw, or
+        artificial and subsequently added. The determined mean is also compared to the desired reference fs.
+
+        :param time: None or list of floats, optional, default=None; The vector containing the timestamps.
+        :param signal: None or list of floats, optional, default=None; The vector containing the signal samples.
+        :param fs: None or float, optional, default=None; The desired sampling frequency in Hz.
+        :param factor: int, required, default=0; The factor of the timebase: 0: seconds, 3: milliseconds, 6: microseconds.
+        :param debug: bool, default=False; Flag to enable the debug mode that prints additional information.
 
         :return: a dict containing:
-            "time_base": {False, True}, if time base provided;
-            "time_off": float of time in seconds offset of the time base;
-            "time_len": length of the recording;
-            "fs": float, desired sampling rate in Hz;
-            "fs_real": float, real average sampling rate in Hz;
-            "fs_std": float, jitter of the real sampling rate in seconds s;
+            "time_base": {False, True}, if time base provided.
+            "time_off": float of time in seconds offset of the time base.
+            "time_len": length of the recording.
+            "fs": float, desired sampling rate in Hz.
+            "fs_real": float, real average sampling rate in Hz.
+            "fs_std": float, jitter of the real sampling rate in seconds s.
         """
 
         # Fetch data from instance if no arguments are passed.
@@ -274,7 +299,26 @@ class PPGraw:
         }
 
     def review_amplitude(self, time=None, signal=None, fs=None,
-                        debug=False):
+                         debug=False):
+        """Tool to review the amplitude regarding a natural DC offset.
+
+        The amplitude of raw PPG signals naturally shows a large DC offset. Hence, the span of the amplitude, minimum
+        and maximum respectively, are utilized by the review_amplitude tool to reveal whether the signal has been
+        preprocessed, shifted towards zero, or has even been filtered. Furthermore, the mean and median of the signal
+        are derived to provide insights into the characteristics of the PPG signal.
+
+        :param time: None or list of floats, optional, default=None; The vector containing the timestamps.
+        :param signal: None or list of floats, optional, default=None; The vector containing the signal samples.
+        :param fs: None or float, optional, default=None; The desired sampling frequency in Hz.
+        :param debug: bool, default=False; Flag to enable the debug mode that prints additional information.
+
+        :return: a dict containing:
+            "ampl_min": float, the minimum amplitude value.
+            "ampl_max": float, the maximum amplitude value.
+            "ampl_span": float, the span of the amplitude.
+            "ampl_med": float, the median of the amplitude values.
+            "ampl_mean": float, the mean of the amplitude values.
+        """
 
         # Fetch data from instance if no arguments are passed.
         if time is None and signal is None and fs is None:
@@ -310,7 +354,23 @@ class PPGraw:
         }
 
     def review_granularity(self, time=None, signal=None, fs=None,
-                          debug=False):
+                           debug=False):
+        """Tool to review the amplitude's granularity respectively resolution.
+
+        Ideally, the granularity of a sampled signal is identical to the amplitude resolution. The metric helps to
+        unveil applied preprocessing as the values obtained from an ADC are integers by nature, preprocessed ones are,
+        however, usually represented by floats. The review_granularity tool determines the granularity from the sorted
+        list of unique values without duplicates by seeking the minimum Euclidean distance.
+
+        :param time: None or list of floats, optional, default=None; The vector containing the timestamps.
+        :param signal: None or list of floats, optional, default=None; The vector containing the signal samples.
+        :param fs: None or float, optional, default=None; The desired sampling frequency in Hz.
+        :param debug: bool, default=False; Flag to enable the debug mode that prints additional information.
+
+        :return: a dict containing:
+            "ampl_num": int, number of unique values.
+            "ampl_gran": int or float, granularity measure.
+        """
 
         # Fetch data from instance if no arguments are passed.
         if time is None and signal is None and fs is None:
@@ -320,7 +380,7 @@ class PPGraw:
 
         # Determine granularity respectively amplitude resolution.
         signal_sort = np.unique(signal)  # Sort the values and remove duplicates.
-        num_val = len(signal_sort)  # Determine number of amplitude values.
+        num_val = len(signal_sort)  # Determine number of unique amplitude values.
         signal_step = [signal_sort[i]-signal_sort[i-1] for i in
                        range(1, len(signal_sort))]  # Determine step sizes.
         granularity = np.min(signal_step)  # Determine granularity.
@@ -340,7 +400,23 @@ class PPGraw:
         }
 
     def review_normalization(self, time=None, signal=None, fs=None,
-                            debug=False):
+                             debug=False):
+        """Tool to review the amplitude regarding cropping or normalization.
+
+        While the scope of a raw PPG signal is only a minor fraction of the overall signal's extent, it is commonly
+        cropped at its minimum to reduce the memory demands. Furthermore, it is common to scale and normalize the
+        scope to a range of [0,1] or [-1,1]. The review_normalization tool analyzes the signal's minimum and maximum.
+
+        :param time: None or list of floats, optional, default=None; The vector containing the timestamps.
+        :param signal: None or list of floats, optional, default=None; The vector containing the signal samples.
+        :param fs: None or float, optional, default=None; The desired sampling frequency in Hz.
+        :param debug: bool, default=False; Flag to enable the debug mode that prints additional information.
+
+        :return: a dict containing:
+            "ampl_zc": bool, zero-centered or not.
+            "ampl_norm01": bool, [0,1]-normalized or not.
+            "ampl_norm11": bool, [-1,1]-normalized or not.
+        """
 
         # Fetch data from instance if no arguments are passed.
         if time is None and signal is None and fs is None:
@@ -385,6 +461,23 @@ class PPGraw:
     def review_flip(self, time=None, signal=None, fs=None,
                     plot=False,
                     debug=False):
+        """Tool to review the amplitude regarding pulse direction and flipping.
+
+        Most traditional pulse oximetry sensors monitor the PPG signal proportional to the course of the arterial
+        blood pressure (ABP) and hence flipped the signal to enable this analogy. The raw signals of both PPG modes,
+        however, originally show an inversely proportional course. The review_flipped tool identifies the pulse
+        direction by 1) determining the pulses' center of mass and 2) comparing the steepness of the down and up slopes.
+
+        :param time: None or list of floats, optional, default=None; The vector containing the timestamps.
+        :param signal: None or list of floats, optional, default=None; The vector containing the signal samples.
+        :param fs: None or float, optional, default=None; The desired sampling frequency in Hz.
+        :param plot: bool, default=False; Flag to enable the plot of the analysis' illustrations.
+        :param debug: bool, default=False; Flag to enable the debug mode that prints additional information.
+
+        :return: a dict containing:
+            "ampl_flip": bool, pulse amplitude direction flipped or not.
+            "ampl_flip_hist_max": int, position of the center of mass in the histogram.
+        """
 
         # Fetch data from instance if no arguments are passed.
         if time is None and signal is None and fs is None:
@@ -436,6 +529,33 @@ class PPGraw:
     def review_frequency(self, time=None, signal=None, fs=None,
                          plot=False,
                          debug=False):
+        """Tool to review the signal's frequency spectrum regarding low-frequency components.
+
+        As all physiological signals, the raw PPG signal is a non-stationary one and dominated by baseline wandering.
+        Most approaches apply high-pass filters to remove the low-frequency components and to limit the pulsatile signal
+        in a constant boundary envelope. The review_frequency tool analyzes the frequency bands associated with activity
+        in the autonomic nervous system (VLF 0.0 to 0.167 Hz) and respiration (LF 0.167 to 0.667 Hz), and compares their
+        maxima with the maximum and mean of the frequency band typical for the natural heart rate (IF 0.5 to 3.0 Hz).
+
+        :param time: None or list of floats, optional, default=None; The vector containing the timestamps.
+        :param signal: None or list of floats, optional, default=None; The vector containing the signal samples.
+        :param fs: None or float, optional, default=None; The desired sampling frequency in Hz.
+        :param plot: bool, default=False; Flag to enable the plot of the analysis' illustrations.
+        :param debug: bool, default=False; Flag to enable the debug mode that prints additional information.
+
+        :return: a dict containing:
+            "frq_vlf_max": int or float, maximum value in the VLF frequency band.
+            "frq_lf_max": int or float, maximum value in the LF frequency band.
+            "frq_if_max": int or float, maximum value in the IF frequency band.
+            "frq_vlf_mean": float, mean of the values in the VLF frequency band.
+            "frq_lf_mean": float, mean of the values in the LF frequency band.
+            "frq_if_mean": float, mean of the values in the IF frequency band.
+            "frq_vlf_med": int or float, median of the values in the VLF frequency band.
+            "frq_lf_med": int or float, median of the values in the LF frequency band.
+            "frq_if_med": int or float, median of the values in the IF frequency band.
+            "frq_ratio_vlf": float, ratio of max(VLF) / max(IF).
+            "frq_ratio_lf": float, ratio of max(LF) / mean(IF).
+        """
 
         # Fetch data from instance if no arguments are passed.
         if time is None and signal is None and fs is None:
@@ -529,7 +649,25 @@ class PPGraw:
         }
 
     def review_artifacts(self, time=None, signal=None, fs=None,
-                        debug=False):
+                         win=30.0,
+                         debug=False):
+        """Tool to review the signal amplitude regarding slipping artifacts.
+
+        review_artifacts
+        Clipping artifacts are common for aged datasets where the signal has been normalized while the caps of the
+        lowest or highest peaks are cut due to inaccuracies. The review_artifacts tool detects these flat tops by means
+        of multiple successive samples that stay at the constant boundary values for a longer period.
+
+        :param time: None or list of floats, optional, default=None; The vector containing the timestamps.
+        :param signal: None or list of floats, optional, default=None; The vector containing the signal samples.
+        :param fs: None or float, optional, default=None; The desired sampling frequency in Hz.
+        :param win: int or float, optional, default=30.0; The length of the window in samples (int) or seconds (float).
+        :param debug: bool, default=False; Flag to enable the debug mode that prints additional information.
+
+        :return: a dict containing:
+            "atf_clip_n": int, the total number of clipping artifacts counted.
+            "atf_clip_win": int or float, the average number of clipping artifacts per window of length win.
+        """
 
         # Fetch data from instance if no arguments are passed.
         if time is None and signal is None and fs is None:
@@ -537,20 +675,74 @@ class PPGraw:
             signal = self.signal
             fs = self.fs
 
+        atf_n = 0  # TODO Not yet implemented.
+        atf_win = 0.0  # TODO Not yet implemented.
+
         # Print the debug information.
         if debug:
             print("\nARTIFACTS")
 
         # Print the debug information.
         if debug:
-            print("Not yet implemented.")
+            pass
+
+        print("Not yet implemented.")  # TODO Not yet implemented.
 
         # Return a dictionary containing the collected results.
-        return {}
+        return {
+            "atf_clip_n":               atf_n,
+            "atf_clip_win":             atf_win,
+        }
 
     def review(self, time=None, signal=None, fs=None,
                plot=False,
                debug=True):
+        """Tool to run all provided review tools sequentially.
+
+        The review tool sequentially runs all previously provided tools.
+
+        :param time: None or list of floats, optional, default=None; The vector containing the timestamps.
+        :param signal: None or list of floats, optional, default=None; The vector containing the signal samples.
+        :param fs: None or float, optional, default=None; The desired sampling frequency in Hz.
+        :param plot: bool, default=False; Flag to enable the plot of the analysis' illustrations.
+        :param debug: bool, default=False; Flag to enable the debug mode that prints additional information.
+
+        :return: a dict containing:
+            "time_base": {False, True}, if time base provided.
+            "fs": float, desired sampling rate in Hz.
+            "fs_real": float, real average sampling rate in Hz.
+            "fs_std": float, jitter of the real sampling rate in seconds s.
+            ---
+            "ampl_min": float, the minimum amplitude value.
+            "ampl_max": float, the maximum amplitude value.
+            "ampl_span": float, the span of the amplitude.
+            "ampl_med": float, the median of the amplitude values.
+            "ampl_mean": float, the mean of the amplitude values.
+            ---
+            "ampl_num": int, number of unique values.
+            "ampl_gran": int or float, granularity measure.
+            ---
+            "ampl_zc": bool, zero-centered or not.
+            "ampl_norm01": bool, [0,1]-normalized or not.
+            "ampl_norm11": bool, [-1,1]-normalized or not.
+            ---
+            "ampl_flip": bool, pulse amplitude direction flipped or not.
+            ---
+            "frq_vlf_max": int or float, maximum value in the VLF frequency band.
+            "frq_vlf_med": int or float, median of the values in the VLF frequency band.
+            "frq_vlf_mean": float, mean of the values in the VLF frequency band.
+            "frq_lf_max": int or float, maximum value in the LF frequency band.
+            "frq_lf_med": int or float, median of the values in the LF frequency band.
+            "frq_lf_mean": float, mean of the values in the LF frequency band.
+            "frq_if_max": int or float, maximum value in the IF frequency band.
+            "frq_if_med": int or float, median of the values in the IF frequency band.
+            "frq_if_mean": float, mean of the values in the IF frequency band.
+            "frq_ratio_vlf": float, ratio of max(VLF) / max(IF).
+            "frq_ratio_lf": float, ratio of max(LF) / mean(IF).
+            ---
+            "atf_clip_n": int, the total number of clipping artifacts counted.
+            "atf_clip_win": int or float, the average number of clipping artifacts per window of length win.
+        """
 
         # Fetch data from instance if no arguments are passed.
         if time is None and signal is None and fs is None:
@@ -571,8 +763,8 @@ class PPGraw:
             "ampl_num":                 None,
             "ampl_gran":                None,
             "ampl_zc":                  None,
-            "ampl_norm-01":             None,
-            "ampl_norm-11":             None,
+            "ampl_norm01":              None,
+            "ampl_norm11":              None,
             "ampl_flip":                None,
             "frq_vlf_max":              None,
             "frq_vlf_med":              None,
@@ -585,7 +777,7 @@ class PPGraw:
             "frq_if_mean":              None,
             "frq_ratio_vlf":            None,
             "frq_ratio_lf":             None,
-            "artf_clip":                None,
+            "atf_clip":                 None,
         }
 
         import warnings
