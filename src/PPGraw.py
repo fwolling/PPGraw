@@ -675,7 +675,8 @@ class PPGraw:
         # psd_bin, psd_mag = fourier.psd(signal, fs=fs, n_seg=nperseg, n_fft=nperseg, win="hanning", mode="spectrum")  # Calculate Power Spectrum in V**2
 
         # Determine the indices associated with the frequency ranges.
-        range_vlf = (self.FRQ_VLF[0], max([i_bin for i_bin, k_bin in enumerate(psd_bin) if k_bin <= self.FRQ_VLF[1]]))
+        range_vlf = (max([i_bin for i_bin, k_bin in enumerate(psd_bin) if k_bin <= self.FRQ_VLF[0]]),
+                     max([i_bin for i_bin, k_bin in enumerate(psd_bin) if k_bin <= self.FRQ_VLF[1]]))
         range_lf = (max([i_bin for i_bin, k_bin in enumerate(psd_bin) if k_bin <= self.FRQ_LF[0]]),
                     max([i_bin for i_bin, k_bin in enumerate(psd_bin) if k_bin <= self.FRQ_LF[1]]))
         range_if = (max([i_bin for i_bin, k_bin in enumerate(psd_bin) if k_bin <= self.FRQ_IF[0]]),
