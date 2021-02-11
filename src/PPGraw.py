@@ -286,9 +286,9 @@ class PPGraw:
 
         :param signal: list of ints or floats; The vector containing the signal samples.
         :param fs: float; The sampling frequency in Hz.
-        :param n_seg:
-        :param n_fft:
-        :param win:
+        :param n_seg: int; The length of the window segments.
+        :param n_fft: int; The number of samples taken for the FFT of each window segment, usually n_fft = n_seg.
+        :param win: String, default="hanning";
         :param mode: String, default="density"; The power spectral density "density" where Pxx has units of V**2/Hz or
             the power spectrum "spectrum" where Pxx has units of V**2.
         :param debug: bool, default=False; Flag to enable the debug mode that prints additional information.
