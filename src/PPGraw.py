@@ -12,6 +12,7 @@
 
 import numpy as np
 import scipy.signal as sig
+from copy import deepcopy
 import matplotlib.pyplot as plt
 from tabulate import tabulate
 
@@ -104,9 +105,9 @@ class PPGraw:
     AMPL_ZC_ERR_MARGIN = 1.5
 
     # Parameters required for the flip detection.
-    AMPL_FLIP_BP_ORDER = 3  # The order of the band-pass filter.
-    AMPL_FLIP_BP_FC_LOW = 0.4  # The lower corner frequency.
-    AMPL_FLIP_BP_FC_HIGH = 15.0  # The upper corner frequency.
+    AMPL_FLIP_FILT_ORDER = 3  # The order of the band-pass filter.
+    AMPL_FLIP_FILT_FC_LOW = 0.5  # The lower corner frequency.
+    AMPL_FLIP_FILT_FC_UP = 15.0  # The upper corner frequency.
 
     # Mode of the frequency spectral analysis:
     # * "density", calculate Power Spectral Density in V**2/Hz.
@@ -579,7 +580,7 @@ class PPGraw:
         :param debug: bool, default=False; Flag to enable the debug mode that prints additional information.
 
         :return: a dict containing:
-            "ampl_flip": bool; Pulse amplitude direction flipped or not.
+            "ampl_flip_hist": bool; Pulse amplitude direction flipped or not.
             "ampl_flip_hist_max": int; The position of the center of mass in the histogram.
         """
 
@@ -591,8 +592,10 @@ class PPGraw:
 
         # Apply band-pass filter before the analysis.
         signal_bp = signal - np.mean(signal)
-        signal_bp = self.bandpass(signal_bp, fs=fs, order=self.AMPL_FLIP_BP_ORDER,
-                                  fc_low=self.AMPL_FLIP_BP_FC_LOW, fc_hig=self.AMPL_FLIP_BP_FC_HIGH)
+        signal_bp = self.bandpass(signal_bp, fs=fs, order=self.AMPL_FLIP_FILT_ORDER,
+                                  fc_low=self.AMPL_FLIP_FILT_FC_LOW, fc_hig=self.AMPL_FLIP_FILT_FC_UP)
+
+        # CENTER OF MASS APPROACH
 
         # Check if the signal has been flipped.
         granularity = self.review_granularity(time, signal, fs, debug=False)["ampl_gran"]
@@ -605,29 +608,209 @@ class PPGraw:
         hist_ys, hist_bins = np.histogram(signal_bp, bins=bins_n, range=bins_range)
         hist_max = (hist_bins[int(np.argmax(hist_ys))] + hist_bins[int(np.argmax(hist_ys)) + 1]) / 2
 
+        # Determine the amplitudes' center of mass.
+        ampl_flip_hist = True if hist_max > 0 else False
+
         # Plot the histogram.
         if plot:
-            plt.figure()
-            plt.title("Amplitude Flipping")
-            plt.hist(signal_bp, bins=bins_n, range=bins_range)
-            plt.xlabel("amplitude")
-            plt.ylabel("count")
+            plt.figure(figsize=(5.0, 5.0))
+            plt.title("Determination of the Center of Mass")
+            plt.hist(signal_bp, bins=bins_n, range=bins_range, orientation="horizontal")
+            plt.axhline(y=hist_max, linewidth=1.0, color="red", label="center of mass")
+            plt.xlabel("count")
+            plt.ylabel("amplitude")
+            plt.legend(loc="upper right", fontsize=10)
 
-        # Determine the amplitudes' center of mass.
-        ampl_flip = True if hist_max > 0 else False
+        # PULSE STEEPNESS APPROACH
+
+        # Approach based on the pulse direction determination method described in the following paper:
+        # "PPG Pulse Direction Determination Algorithm for PPG Waveform Inversion by Wrist Rotation", Choi et al., 2017.
+
+        # Determine the peaks and troughs in the signal.
+
+        # Define interval of neighboring samples, +- margin.
+        margin = 5  # 5 if int(round(fs / 25)) < 5 else int(round(fs / 50))
+        i_ngbrs = list(range(-margin, margin + 1))
+        pulses = []  # List of pulse candidates.
+        for i_s in range(margin, (len(signal_bp) - margin)):  # Move a window [-margin,margin] along the signal.
+            i_min = i_ngbrs[np.argmin([signal_bp[i_s + i_n] for i_n in i_ngbrs])]  # Determine minimum within window.
+            i_max = i_ngbrs[np.argmax([signal_bp[i_s + i_n] for i_n in i_ngbrs])]  # Determine maximum within window.
+            # Identify the pulse candidates.
+            pulses.append(-1 if i_min == 0 else 1 if i_max == 0 else 0)  # -1: trough; 1: peak; 0: normal value;
+        pulses = margin*[0] + pulses + margin*[0]  # Append zeros for the boundary margins to readjust the indices.
+        puls_min_id = [i_p for i_p, k_p in enumerate(pulses) if k_p < 0]  # Determine indices of minimum positions.
+        puls_max_id = [i_p for i_p, k_p in enumerate(pulses) if k_p > 0]  # Determine indices of maximum positions.
+        # Store initial pulse/trough candidates.
+        pls_min_org_id = puls_min_id
+        pls_max_org_id = puls_max_id
+        # Original Pulse Candidate Extraction
+        # Select only those pulses/troughs that are higher/lower than their left an right neighbors.
+        puls_min_id = [puls_min_id[i_p] for i_p in range(1, len(puls_min_id) - 1) if signal_bp[puls_min_id[i_p - 1]] > signal_bp[puls_min_id[i_p]] < signal_bp[puls_min_id[i_p + 1]]]
+        puls_max_id = [puls_max_id[i_p] for i_p in range(1, len(puls_max_id) - 1) if signal_bp[puls_max_id[i_p - 1]] < signal_bp[puls_max_id[i_p]] > signal_bp[puls_max_id[i_p + 1]]]
+
+        # Adapted Pulse Candidate Extraction
+        # Adapted algorithm to select only valid pulses and troughs.
+
+        # Remove all pulses below 0 and all troughs beyond 0.
+        puls_min_id = [puls_min_id[i_p] for i_p in range(len(puls_min_id)) if signal_bp[puls_min_id[i_p]] < 0]
+        puls_max_id = [puls_max_id[i_p] for i_p in range(len(puls_max_id)) if signal_bp[puls_max_id[i_p]] > 0]
+
+        # Validate troughs in between peaks.
+        puls_min_sel_id = deepcopy(puls_min_id)  # Copy the list.
+        for i_max in range(len(puls_max_id[:-1])):
+            i_cur = puls_max_id[i_max]  # Current position.
+            i_stp = puls_max_id[i_max + 1]  # Step forward position.
+            i_min_btw = [i_min for i_min in puls_min_id if i_cur < i_min < i_stp]  # Determine troughs in between.
+            # print(str(i_cur) + " - " + str(i_stp) + ":   " + str(i_min_btw))
+            if len(i_min_btw) > 1:
+                for i_del in i_min_btw:  # Remove all invalid indices.
+                    puls_min_sel_id.remove(i_del)  # Removed undesired index.
+            if len(i_min_btw) != 1:
+                # Determine the minimum in between as trough.
+                i_btw = np.argmin(signal_bp[i_cur+1:i_stp]) + i_cur + 1
+                puls_min_sel_id.append(i_btw)
+        # puls_min_sel_id.sort()  # Sort the list of troughs.
+        puls_min_sel_id = list(np.unique(puls_min_sel_id))  # Sort the list of troughs and remove duplicates.
+
+        # Validate peaks in between troughs.
+        puls_max_sel_id = deepcopy(puls_max_id)  # Copy the list.
+        for i_min in range(len(puls_min_id[:-1])):
+            i_cur = puls_min_id[i_min]  # Current position.
+            i_stp = puls_min_id[i_min + 1]  # Step forward position.
+            i_max_btw = [i_max for i_max in puls_max_id if i_cur < i_max < i_stp]  # Determine peaks in between.
+            # print(str(i_cur) + " - " + str(i_stp) + ":   " + str(i_max_btw))
+            if len(i_max_btw) > 1:
+                for i_del in i_max_btw:  # Remove all invalid indices.
+                    puls_max_sel_id.remove(i_del)  # Removed undesired index.
+            if len(i_max_btw) != 1:
+                # Determine the maximum in between as peak.
+                i_btw = np.argmax(signal_bp[i_cur+1:i_stp]) + i_cur + 1
+                puls_max_sel_id.append(i_btw)
+        # puls_max_sel_id.sort()  # Sort the list of peaks.
+        puls_max_sel_id = list(np.unique(puls_max_sel_id))  # Sort the list of peaks and remove duplicates.
+
+        # Remove all pulses below 0 and all troughs beyond 0.
+        puls_min_sel_id = [puls_min_sel_id[i_p] for i_p in range(len(puls_min_sel_id)) if signal_bp[puls_min_sel_id[i_p]] < 0]
+        puls_max_sel_id = [puls_max_sel_id[i_p] for i_p in range(len(puls_max_sel_id)) if signal_bp[puls_max_sel_id[i_p]] > 0]
+
+        puls_min_sel_n = len(puls_min_sel_id)  # Determine the number of detected troughs.
+        puls_max_sel_n = len(puls_max_sel_id)  # Determine the number of detected peaks.
+
+        # Span and characterize slopes between all peaks and their next troughs, the falling slopes respectively.
+        puls_fall_steep = []
+        i_v = 0
+        for p in puls_max_sel_id:
+            # Increment trough pointer until it is right behind a peak.
+            while i_v+1 < len(puls_min_sel_id) and puls_min_sel_id[i_v] < p:
+                i_v += 1
+            x_dif = puls_min_sel_id[i_v] - p  # Determine the x difference.
+            y_dif = signal_bp[puls_min_sel_id[i_v]] - signal_bp[p]  # Determine the y difference.
+            puls_fall_steep.append(y_dif / x_dif)  # Calculate the slope's steepness dy/dx.
+
+        # Span and characterize slopes between all peaks and their next troughs.
+        puls_rise_steep = []
+        i_p = 0
+        for v in puls_min_sel_id:
+            # Increment peak pointer until it is right behind a trough.
+            while i_p+1 < len(puls_max_sel_id) and puls_max_sel_id[i_p] < v:
+                i_p += 1
+            x_dif = puls_max_sel_id[i_p] - v  # Determine the x difference.
+            y_dif = signal_bp[puls_max_sel_id[i_p]] - signal_bp[v]  # Determine the y difference.
+            puls_rise_steep.append(y_dif / x_dif)  # Calculate the slope's steepness dy/dx.
+
+        # Calculate the average slope steepness.
+        ampl_flip_slop_rise = abs(np.mean(puls_rise_steep))
+        ampl_flip_slop_fall = abs(np.mean(puls_fall_steep))
+
+        # Determine the pulse direction.
+        # The systolic slope is steeper than the diastolic slope.
+        ampl_flip_slop = True if ampl_flip_slop_rise > ampl_flip_slop_fall else False
+
+        # if plot:  # Plot the originally identified pulse and trough candidates.
+        #     plt.figure(figsize=(20.0, 5.0))
+        #     plt.title("Identified Pulse and Trough Candidates")
+        #     plt.plot(signal_bp)
+        #     plt.plot(pls_max_org_id, [signal_bp[i_p] for i_p in pls_max_org_id], color="red", linestyle="None", marker="o", markersize=3.0, label="peak")
+        #     plt.plot(pls_min_org_id, [signal_bp[i_p] for i_p in pls_min_org_id], color="orange", linestyle="None", marker="o", markersize=3.0, label="trough")
+        #     plt.xlim((0.0, 60.0*fs))
+        #     #plt.xlabel("amplitude")
+        #     #plt.ylabel("count")
+        #     # Plot the legend.
+        #     plt.legend(loc="upper right", fontsize=10)
+
+        if plot:  # Plot the selected pulses and troughs.
+            plt.figure(figsize=(20.0, 5.0))
+            plt.title("Selected Pulses and Troughs")
+            plt.plot(time, signal_bp)
+            plt.plot([time[p] for p in puls_max_sel_id], [signal_bp[i_p] for i_p in puls_max_sel_id], color="red", linestyle="None", marker="o", markersize=3.0, label="peak")
+            plt.plot([time[v] for v in puls_min_sel_id], [signal_bp[i_p] for i_p in puls_min_sel_id], color="orange", linestyle="None", marker="o", markersize=3.0, label="trough")
+            #plt.xlim((min(time), max(time)))
+            plt.xlim(0.0, 30.0)
+            plt.xlabel("relative time $t$ in s")
+            plt.ylabel("amplitude")
+            plt.legend(loc="upper right", fontsize=10)
+
+        # if plot:  # Plot the distribution of the peaks and troughs.
+        #     # Determine the number of bins for the histogram.
+        #     bins_n = int(round((np.max(signal_bp) - np.min(signal_bp)) / granularity))
+        #     # Limit the number of bins to 100.
+        #     bins_n = (101 if bins_n > 100 else bins_n)
+        #     bins_range = (int(np.min(signal_bp)), int(np.max(signal_bp)))
+        #     hist_ys, hist_bins = np.histogram(signal_bp, bins=bins_n, range=bins_range)
+        #     hist_max = (hist_bins[int(np.argmax(hist_ys))] + hist_bins[int(np.argmax(hist_ys)) + 1]) / 2
+        #
+        #     plt.figure(figsize=(5.0, 5.0))
+        #     plt.title("Distribution of the Peaks and Troughs")
+        #     plt.hist([signal_bp[i_pks] for i_pks in puls_max_sel_id], bins=bins_n, range=bins_range,
+        #              orientation="horizontal", color="red", alpha=0.75, label="peaks")
+        #     plt.hist([signal_bp[i_val] for i_val in puls_min_sel_id], bins=bins_n, range=bins_range,
+        #              orientation="horizontal", color="orange", alpha=0.75, label="troughs")
+        #     plt.xlabel("count")
+        #     plt.ylabel("amplitude position")
+        #     plt.legend(loc="upper right", fontsize=10)
+
+        if plot:  # Plot the distribution of the rising and falling slopes.
+            bins_n = 101
+            bins_range = [int(np.floor(np.min(puls_rise_steep + puls_fall_steep))),
+                          int(np.ceil(np.max(puls_rise_steep + puls_fall_steep)))]
+
+            plt.figure(figsize=(5.0, 5.0))
+            plt.title("Distribution of the Slope Steepness")
+            plt.hist(puls_rise_steep, bins=bins_n, range=bins_range,
+                     orientation="horizontal", color="green", alpha=0.5, label="up slope")
+            plt.hist(puls_fall_steep, bins=bins_n, range=bins_range,
+                     orientation="horizontal", color="blue", alpha=0.5, label="down slope")
+            plt.axhline(y=0.0, linewidth=0.75, linestyle=":", color="black")
+            plt.axhline(y=np.mean(puls_rise_steep), linewidth=1.0, color="red")
+            plt.axhline(y=np.mean(puls_fall_steep), linewidth=1.0, color="red")
+            plt.xlabel("count")
+            plt.ylabel("slope steepness")
+            plt.legend(loc="upper right", fontsize=10)
 
         # Print the debug information.
         if debug:
             print(" AMPLITUDE FLIPPING")
             print(tabulate([
                 ["center of mass", str(hist_max)],
-                ["flipped", str("yes" if ampl_flip else "no")],
+                ["", ""],
+                ["number of detected peaks", str(puls_max_sel_n)],
+                ["number of detected troughs", str(puls_min_sel_n)],
+                ["mean rising slope", str(ampl_flip_slop_rise)],
+                ["mean falling slope", str(ampl_flip_slop_fall)],
+                ["", ""],
+                ["flipped (center of mass)", str("yes" if ampl_flip_hist else "no")],
+                ["flipped (slope steepness)", str("yes" if ampl_flip_slop else "no")],
             ], tablefmt=self.PRINT_TABLE_FORMAT, colalign=("left", "right")))
 
         # Return a dictionary containing the collected results.
         return {
-            "ampl_flip":                ampl_flip,
+            "ampl_flip_hist":           ampl_flip_hist,
             "ampl_flip_hist_max":       hist_max,
+            "ampl_flip_slop":           ampl_flip_slop,
+            "ampl_flip_slop_p":         puls_max_sel_n,
+            "ampl_flip_slop_t":         puls_min_sel_n,
+            "ampl_flip_slop_rise":      ampl_flip_slop_rise,
+            "ampl_flip_slop_fall":      ampl_flip_slop_fall,
         }
 
     def review_frequency(self, time=None, signal=None, fs=None,
@@ -733,6 +916,7 @@ class PPGraw:
                 ["VLF med", frq_vlf_med],
                 ["LF med", frq_lf_med],
                 ["IF med", frq_if_med],
+                ["", ""],
                 ["VLF / IF ratio", frq_ratio_vlf],
                 ["LF / IF ratio", frq_ratio_lf],
             ], tablefmt=self.PRINT_TABLE_FORMAT, colalign=("left", "right")))
@@ -830,7 +1014,7 @@ class PPGraw:
             "ampl_norm01": bool; [0,1]-normalized or not.
             "ampl_norm11": bool; [-1,1]-normalized or not.
             ---
-            "ampl_flip": bool; The pulse amplitude direction flipped or not.
+            "ampl_flip_hist": bool; The pulse amplitude direction flipped or not.
             ---
             "frq_vlf_max": int or float; The maximum value in the VLF frequency band.
             "frq_vlf_med": int or float; The median of the values in the VLF frequency band.
@@ -869,7 +1053,7 @@ class PPGraw:
             "ampl_zc":                  None,
             "ampl_norm01":              None,
             "ampl_norm11":              None,
-            "ampl_flip":                None,
+            "ampl_flip_hist":                None,
             "frq_vlf_max":              None,
             "frq_vlf_med":              None,
             "frq_vlf_mean":             None,
